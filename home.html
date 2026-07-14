@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ArisShop — Productos de Élite</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="src/css/home.css"/>
+</head>
+<body>
+
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- Cart Drawer -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-title">Tu Carrito</div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <span class="cart-empty-icon">🛒</span>
+      Tu carrito está vacío
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <div class="cart-total-label">Total</div>
+      <div class="cart-total-amount" id="cartTotal">$0</div>
+    </div>
+    <button class="checkout-btn">Finalizar Compra →</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Aris<span>Shop</span></a>
+  <div class="nav-actions">
+    <a href="/src/pages/catalogo.html" class="nav-link">Catálogo</a>
+    <button class="nav-icon" onclick="toggleCart()" title="Carrito">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left reveal">
+    <div class="hero-tag">Temporada 2026 · Productos de Élite</div>
+    <h1 class="hero-title">
+      EL FUTURO<br>
+      <span class="outline">EN TUS</span><br>
+      MANOS
+    </h1>
+    <p class="hero-desc">Dispositivos de alta gama, accesorios premium y gadgets exclusivos. Calidad sin concesiones, entrega garantizada a toda Colombia.</p>
+    <div class="hero-cta">
+<button class="btn-primary" onclick="window.location.href='/src/pages/catalogo.html'">
+    Explorar Catálogo
+</button>      
+<button class="btn-ghost">Ver Ofertas </button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-product-mock">
+      <div class="hero-product-image"></div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">2K+</div>
+        <div class="stat-label">Productos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Satisfacción</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24H</div>
+        <div class="stat-label">Despacho</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span>★</span> Envío gratis +$200k</span>
+    <span class="ticker-item"><span>★</span> Garantía 12 meses</span>
+    <span class="ticker-item"><span>★</span> Pago con Nequi y Bancolombia</span>
+    <span class="ticker-item"><span>★</span> Nuevos ingresos semanales</span>
+    <span class="ticker-item"><span>★</span> Soporte 24/7</span>
+    <span class="ticker-item"><span>★</span> Envío gratis +$200k</span>
+    <span class="ticker-item"><span>★</span> Garantía 12 meses</span>
+    <span class="ticker-item"><span>★</span> Pago con Nequi y Bancolombia</span>
+    <span class="ticker-item"><span>★</span> Nuevos ingresos semanales</span>
+    <span class="ticker-item"><span>★</span> Soporte 24/7</span>
+  </div>
+</div>
+
+<!-- CATEGORÍAS -->
+<section id="categorias">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-tag">Explorar por</div>
+      <h2 class="section-title">Categorías</h2>
+    </div>
+    <a href="#" class="see-all">Ver todas →</a>
+  </div>
+  <div class="categories-grid">
+    <div class="cat-card reveal" style="transition-delay:.05s">
+      <div class="cat-icon" aria-hidden="true"></div>
+      <div class="cat-name">Smartphones</div>
+      <div class="cat-count">142 productos</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.1s">
+      <div class="cat-icon" aria-hidden="true"></div>
+      <div class="cat-name">Laptops</div>
+      <div class="cat-count">89 productos</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.15s">
+      <div class="cat-icon" aria-hidden="true"></div>
+      <div class="cat-name">Audio</div>
+      <div class="cat-count">210 productos</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+    <div class="cat-card reveal" style="transition-delay:.2s">
+      <div class="cat-icon" aria-hidden="true"></div>
+      <div class="cat-name">Wearables</div>
+      <div class="cat-count">76 productos</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS -->
+<section id="productos" style="padding-top:0">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-tag">Más vendidos</div>
+      <h2 class="section-title">Productos Destacados</h2>
+    </div>
+    <a href="#" class="see-all">Ver catálogo →</a>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- FEATURED BANNER -->
+<div class="featured reveal" id="destacados">
+  <div class="featured-content">
+    <div class="featured-eyebrow">Lanzamiento exclusivo</div>
+    <h2 class="featured-title">
+      AUDIO<br>
+      <em>SIN</em><br>
+      LÍMITES
+    </h2>
+    <div class="featured-price">$389.900</div>
+    <div class="featured-price-note">Precio especial · Edición limitada</div>
+    <p class="featured-desc">Auriculares over-ear con cancelación activa de ruido, 40h de batería y sonido Hi-Fi certificado. El companion perfecto para tu workflow.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="addToCart(11)">Agregar al carrito</button>
+      <button class="btn-ghost">Ver especificaciones</button>
+    </div>
+  </div>
+  <div class="featured-visual">
+    <div class="featured-visual-bg"></div>
+    <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Headphones -->
+      <path d="M60 140 C60 90 100 50 140 50 C180 50 220 90 220 140" stroke="#353A3E" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <rect x="44" y="128" width="32" height="52" rx="12" fill="#353A3E"/>
+      <rect x="48" y="132" width="24" height="44" rx="9" fill="#1A1A1A"/>
+      <rect x="204" y="128" width="32" height="52" rx="12" fill="#353A3E"/>
+      <rect x="208" y="132" width="24" height="44" rx="9" fill="#1A1A1A"/>
+      <!-- Details -->
+      <circle cx="60" cy="154" r="8" fill="#222526"/>
+      <circle cx="220" cy="154" r="8" fill="#222526"/>
+      <rect x="134" y="44" width="12" height="12" rx="6" fill="#E0E0E0" opacity=".3"/>
+    </svg>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <div class="newsletter-tag">Únete a la comunidad</div>
+  <h2 class="newsletter-title">OFERTAS EXCLUSIVAS</h2>
+  <p class="newsletter-sub">Suscríbete y recibe primero las mejores ofertas, lanzamientos y descuentos exclusivos para miembros.</p>
+  <div class="newsletter-form">
+    <input type="email" class="newsletter-input" placeholder="tu@correo.com" id="emailInput"/>
+    <button class="newsletter-submit" onclick="subscribeEmail()">Suscribirse</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Aris<span>Shop</span></div>
+      <p class="footer-desc">Tecnología premium para Colombia. Productos originales, entrega rápida y garantía real.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Tienda</div>
+      <ul class="footer-links">
+        <li><a href="#">Smartphones</a></li>
+        <li><a href="#">Laptops</a></li>
+        <li><a href="#">Accesorios</a></li>
+        <li><a href="#">Audio</a></li>
+        <li><a href="#">Wearables</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Soporte</div>
+      <ul class="footer-links">
+        <li><a href="#">Seguimiento</a></li>
+        <li><a href="#">Garantías</a></li>
+        <li><a href="#">Devoluciones</a></li>
+        <li><a href="#">Preguntas frecuentes</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">hola@arisshop.co</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 ArisShop · Hecho en Colombia 🇨🇴</div>
+    <div class="footer-socials">
+      <a href="#" class="social-link">📘</a>
+      <a href="#" class="social-link">📸</a>
+      <a href="#" class="social-link">🎵</a>
+      <a href="#" class="social-link">💬</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script src="src/js/utils.js"></script>
+<script src="src/js/data.js"></script>
+<script src="src/js/cart.js"></script>
+<script src="src/js/home.js"></script>
+</body>
+</html>
