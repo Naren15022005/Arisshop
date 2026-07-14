@@ -75,7 +75,7 @@ function loadRelated(cat, excludeId) {
   }
   grid.innerHTML = related.map(p => `
     <a href="/src/pages/detalle.html?id=${p.id}" class="rel-card">
-      <span class="emoji" style="${p.img ? `background-image:url('${p.img}')` : ''}">${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}</span>
+      <span class="rel-card-img" style="${p.img ? `background-image:url('${p.img}')` : ''}">${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}</span>
       <span class="name">${p.name}</span>
       <span class="price">${fmt(p.price)}</span>
     </a>

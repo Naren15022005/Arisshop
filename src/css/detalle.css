@@ -253,13 +253,12 @@ nav {
   color:inherit;
 }
 .rel-card:hover { transform:scale(1.02); background:var(--dim); }
-.rel-card .emoji {
+.rel-card .rel-card-img {
   width:100%;
   height:140px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:2.8rem;
   background-color:rgba(255,255,255,.04);
   background-size:cover;
   background-position:center;

@@ -500,11 +500,20 @@
     position:relative; overflow:hidden;
     min-height:180px;
     display:flex; flex-direction:column; justify-content:flex-end;
-    transition: background .3s;
+    transition: background .3s, transform .3s;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+  }
+  .cat-card::before {
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(circle at top left, rgba(0,0,0,.16), transparent 42%);
+    pointer-events:none;
   }
   .cat-card:nth-child(2) { background:var(--graphite); }
   .cat-card:nth-child(4) { background:var(--graphite); }
-  .cat-card:hover { background:var(--onyx); }
+  .cat-card:hover { transform:translateY(-3px); }
   .cat-card:nth-child(2):hover,.cat-card:nth-child(4):hover { background:#2e3336; }
   .cat-icon {
     width:64px;
@@ -513,12 +522,18 @@
     display:block;
     border-radius:18px;
     background:rgba(255,255,255,.08);
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
     transition: transform .3s cubic-bezier(.23,1,.32,1), background .3s;
+    flex-shrink:0;
   }
   .cat-card:hover .cat-icon { transform:scale(1.05); }
+
+  /* Background images for category cards.
+     Put the image files under src/img/ and update these URLs. */
+  .smartphones { background-image:url('src/img/cat-smartphones.jpg'); }
+  .laptops { background-image:url('src/img/cat-laptops.jpg'); }
+  .audio { background-image:url('src/img/cat-audio.jpg'); }
+  .wearables { background-image:url('src/img/cat-wearables.jpg'); }
+
   .cat-name {
     font-family:'Bebas Neue',sans-serif;
     font-size:1.5rem; letter-spacing:.06em;

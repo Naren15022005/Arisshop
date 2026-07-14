@@ -1,6 +1,13 @@
 // Data is centralized in src/js/data.js (window.ALL)
 
-const CATS = ['Todos', 'Smartphones', 'Laptops', 'Audio', 'Wearables', 'Tablets', 'Accesorios', 'Gaming', 'Cámaras', 'Smart Home'];
+function getCategoryLabels() {
+  const categoryMeta = window.CATEGORIES || [];
+  const manualLabels = categoryMeta.map(c => c.label);
+  const dynamicCats = [...new Set(ALL.map(p => p.cat).filter(cat => !manualLabels.includes(cat)))];
+  return ['Todos', ...manualLabels, ...dynamicCats];
+}
+
+const CATS = getCategoryLabels();
 const PER_PAGE = 12;
 
 // ── STATE ────────────────────────────────────────────────────────
@@ -14,7 +21,10 @@ let state = {
   view: 'grid',
   page: 1,
 };
-
+const urlCategory = new URLSearchParams(window.location.search).get('cat');
+if (urlCategory && CATS.includes(urlCategory)) {
+  state.cat = urlCategory;
+}
 // Cart handled by src/js/cart.js
 
 // ── FILTER ENGINE ────────────────────────────────────────────────

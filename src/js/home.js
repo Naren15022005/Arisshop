@@ -4,6 +4,23 @@ const featuredProducts = (window.ALL || [])
   .filter(p => featuredIds.includes(p.id))
   .sort((a, b) => featuredIds.indexOf(a.id) - featuredIds.indexOf(b.id));
 
+function renderCategories() {
+  const grid = document.getElementById('categoriesGrid');
+  const categories = window.CATEGORIES || [];
+  const counts = categories.reduce((acc, cat) => {
+    acc[cat.label] = ALL.filter(p => p.cat === cat.label).length;
+    return acc;
+  }, {});
+  grid.innerHTML = categories.map((cat, index) => `
+    <div class="cat-card reveal" style="transition-delay:${0.05 * (index + 1)}s; background-image:url('${cat.image || ''}')" onclick="window.location.href='/src/pages/catalogo.html?cat=${encodeURIComponent(cat.label)}'">
+      <div class="cat-icon" aria-hidden="true"></div>
+      <div class="cat-name">${cat.label}</div>
+      <div class="cat-count">${counts[cat.label] || 0} productos</div>
+      <div class="cat-arrow">↗</div>
+    </div>
+  `).join('');
+}
+
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   const format = window.fmt || (n => '$' + n.toLocaleString('es-CO'));
@@ -62,6 +79,7 @@ function setupNavScroll() {
   nav.style.padding = window.scrollY > 40 ? '12px 48px' : '20px 48px';
 }
 
+renderCategories();
 renderProducts();
 observeReveal();
 window.addEventListener('scroll', setupNavScroll);
