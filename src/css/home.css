@@ -755,7 +755,7 @@
       max-width:720px;
       margin:0 auto;
       padding:40px 20px 20px;
-      text-align:center;
+      text-align:left;
       min-height:calc(100vh - 80px);
       display:flex;
       flex-direction:column;
@@ -805,6 +805,7 @@
     }
     .hero-desc {
       font-size:.95rem;
+      text-align:justify;
     }
     section { padding:60px 20px; }
     .categories-grid { grid-template-columns:repeat(2,1fr); }
@@ -814,10 +815,10 @@
 
   @media(max-width:640px){
     .hero { gap:0; padding-top:70px; }
-    .hero-left { padding:40px 16px 20px; min-height:calc(100vh - 70px); gap:16px; }
-    .hero-title { font-size:clamp(2.6rem,11vw,3.6rem); }
-    .hero-desc { font-size:.9rem; }
-    .hero-tag { font-size:.65rem; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .hero-left { padding:24px 16px 20px; min-height:calc(100vh - 70px); gap:16px; }
+    .hero-title { font-size:clamp(2.8rem,12vw,3.8rem); text-align:center; }
+    .hero-desc { font-size:.95rem; text-align:justify; }
+    .hero-tag { font-size:.7rem; gap:8px; flex-wrap:wrap; justify-content:center; }
     .hero-tag::before { width:20px; }
     .hero-product-image {
       width:min(78vw,280px);
@@ -881,7 +882,7 @@
     .footer-top { flex-direction:column; gap:24px; }
     .footer-bottom { flex-direction:column; gap:12px; }
     .footer-socials { gap:12px; }
-    .btn-primary, .btn-ghost { padding:12px 24px; font-size:.75rem; width:100%; }
+    .btn-primary, .btn-ghost { padding:14px 28px; font-size:.8rem; width:100%; }
     .hero-cta { flex-direction:column; }
   }
 
