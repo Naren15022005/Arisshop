@@ -47,6 +47,8 @@ const ALL = [
   {id:30, name:'DJI Mini 4 Pro',          cat:'Cámaras',     price:3800000, old:null,    img:'src/img/product-placeholder.svg', badge:'hot',  specs:'4K/100fps · 34min vuelo', desc:'Dron plegable con cámara de alta calidad.'},
   {id:31, name:'Sony ZV-1F',              cat:'Cámaras',     price:1350000, old:1500000, img:'src/img/product-placeholder.svg', badge:'sale', specs:'20mm · 4K · Vlog', desc:'Cámara compacta para vlogging con enfoque automático.'},
   {id:32, name:'Ring Doorbell 4',         cat:'Smart Home',  price:650000,  old:null,    img:'src/img/product-placeholder.svg', badge:'new',  specs:'1080p · WiFi · 2 vías', desc:'Videoportero inteligente con detección de movimiento.'},
+  {id:33, name:'ArisSound Elite ANC',     cat:'Audio',       price:589000,  old:null,    img:'src/img/product-placeholder.svg', badge:'new',  specs:'ANC · 50h · LDAC', desc:'Edición limitada con cancelación activa de ruido premium y batería ultra extendida.'},
+  {id:34, name:'StreamMaster Pro Bundle', cat:'Streaming',   price:1290000, old:1590000, img:'src/img/product-placeholder.svg', badge:'sale', specs:'4K · RGB · Mic condenser', desc:'Kit completo de streaming con cámara 4K y micrófono profesional.'},
 ];
 
 // Expose to global scope for existing non-module scripts

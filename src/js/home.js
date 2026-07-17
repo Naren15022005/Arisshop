@@ -73,13 +73,74 @@ function observeReveal() {
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 }
 
+function renderExclusives() {
+  const grid = document.getElementById('featuredGrid');
+  if (!grid) return;
+  const exclusiveIds = [33, 34, 11];
+  const exclusiveProducts = (window.ALL || [])
+    .filter(p => exclusiveIds.includes(p.id))
+    .sort((a, b) => exclusiveIds.indexOf(a.id) - exclusiveIds.indexOf(b.id));
+  const format = window.fmt || (n => '$' + n.toLocaleString('es-CO'));
+  grid.innerHTML = exclusiveProducts.map(p => `
+    <div class="product-card reveal">
+      <div class="card-img">
+        <div class="card-img-bg"></div>
+        ${p.badge ? `<span class="card-badge ${p.badge}">${p.badge === 'new' ? 'Nuevo' : p.badge === 'hot' ? 'Popular' : 'Oferta'}</span>` : ''}
+        <div class="card-img-inner" style="${p.img ? `background-image:url('${p.img}')` : ''}">
+          ${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}
+        </div>
+        <div class="card-overlay">
+          <button class="overlay-btn" onclick="addToCart(${p.id})">Agregar al carrito</button>
+          <a href="/src/pages/detalle.html?id=${p.id}" class="overlay-btn ghost">Ver detalles</a>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${p.cat}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-specs">${p.specs || ''}</div>
+        <div class="card-footer">
+          <div class="card-price">
+            ${p.old ? `<span class="old">${format(p.old)}</span>` : ''}
+            ${format(p.price)}
+          </div>
+          <div class="card-stock">En stock</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  observeReveal();
+}
+
 function setupNavScroll() {
   const nav = document.getElementById('mainNav');
   if (!nav) return;
   nav.style.padding = window.scrollY > 40 ? '12px 48px' : '20px 48px';
 }
 
+function setupCarousel(gridId) {
+  const grid = document.getElementById(gridId);
+  if (!grid || window.innerWidth > 640) return;
+  let interval;
+  const scroll = () => {
+    const cards = grid.querySelectorAll('.product-card');
+    if (!cards.length) return;
+    const next = Array.from(cards).find(c => c.getBoundingClientRect().left > 16);
+    if (next) grid.scrollTo({ left: next.offsetLeft - grid.offsetLeft, behavior:'smooth' });
+    else grid.scrollTo({ left:0, behavior:'smooth' });
+  };
+  const start = () => { stop(); interval = setInterval(scroll, 3500); };
+  const stop = () => clearInterval(interval);
+  grid.addEventListener('touchstart', stop, { once:true });
+  grid.addEventListener('mouseenter', stop);
+  grid.addEventListener('mouseleave', start);
+  start();
+  window.addEventListener('resize', () => { if (window.innerWidth > 640) stop(); });
+}
+
 renderCategories();
 renderProducts();
+renderExclusives();
 observeReveal();
+setupCarousel('productsGrid');
+setupCarousel('featuredGrid');
 window.addEventListener('scroll', setupNavScroll);
