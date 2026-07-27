@@ -216,7 +216,32 @@
     document.getElementById('checkoutForm')?.addEventListener('submit', handleCheckoutSubmit);
   }
 
-  function handleCheckoutSubmit(event) {
+  let pdfLibsPromise = null;
+  function ensurePdfLibrariesLoaded() {
+    if ((window.jspdf || window.jsPDF) && window.QRious) return Promise.resolve(true);
+    if (pdfLibsPromise) return pdfLibsPromise;
+
+    const loadScript = src => new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+
+    pdfLibsPromise = Promise.all([
+      loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),
+      loadScript('https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js')
+    ]).then(() => true).catch(err => {
+      pdfLibsPromise = null;
+      console.error('Error cargando librerías de PDF/QR:', err);
+      return false;
+    });
+
+    return pdfLibsPromise;
+  }
+
+  async function handleCheckoutSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const name = form.name.value.trim();
@@ -227,6 +252,23 @@
 
     if (!name || !email || !phone || !address || !paymentMethod) {
       alert('Por favor completa todos los datos del formulario.');
+      return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Generando factura...';
+    }
+
+    // Lazy load PDF & QR libraries on demand
+    const loaded = await ensurePdfLibrariesLoaded();
+    if (!loaded) {
+      alert('No se pudieron cargar las librerías de facturación. Por favor verifica tu conexión.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generar factura y enviar WhatsApp';
+      }
       return;
     }
 
@@ -246,7 +288,15 @@
       clearCart();
       closeCheckoutModal();
       openWhatsApp(orderData);
+      if (window.emitOrderPlaced) {
+        window.emitOrderPlaced(orderData);
+      }
       alert('Factura generada y WhatsApp abierto. Revisa tu navegador.');
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Generar factura y enviar WhatsApp';
     }
   }
 

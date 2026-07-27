@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil de Usuario — ArisShop</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/src/css/home.css" />
+  <style>
+    body {
+      background: var(--jet);
+      color: var(--platinum);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* COVER BANNER PANTALLA COMPLETA */
+    .profile-cover {
+      width: 100%;
+      height: 240px;
+      background: linear-gradient(135deg, #353A3E 0%, #1A1A1A 100%);
+      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .profile-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 75% 30%, rgba(224, 224, 224, 0.15) 0%, transparent 65%);
+    }
+
+    .profile-top-actions {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .profile-action-icon-btn {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-family: 'DM Mono', monospace;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+
+    .profile-action-icon-btn:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
+    }
+
+    /* LAYOUT PANTALLA COMPLETA */
+    .profile-page-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 32px 60px;
+      flex: 1;
+    }
+
+    .profile-header-area {
+      margin-top: -55px;
+      margin-bottom: 36px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .profile-identity-group {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .profile-avatar-box {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 4px solid var(--jet);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .profile-identity-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 2px;
+      margin-bottom: -4px;
+    }
+
+    .profile-name-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-display-name {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: var(--white);
+      margin: 0;
+    }
+
+    .profile-handle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--ash);
+      margin: 4px 0 0 0;
+    }
+
+    .profile-grid-layout {
+      width: 100%;
+    }
+
+    .profile-info-card {
+      background: var(--onyx);
+      border: 1px solid var(--graphite);
+      border-radius: 20px;
+      padding: 28px;
+      height: fit-content;
+    }
+
+    .profile-detail-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .profile-detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-detail-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ash);
+    }
+
+    .profile-detail-val {
+      color: var(--white);
+      font-size: 0.95rem;
+    }
+
+    .profile-main-content {
+      background: var(--onyx);
+      border: 1px solid var(--graphite);
+      border-radius: 20px;
+      padding: 32px;
+    }
+
+    /* ── SISTEMA DE PESTAÑAS (TABS) ── */
+    .profile-tabs-nav {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--graphite);
+      margin-bottom: 28px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .profile-tabs-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .profile-tab-btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--ash);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 12px 18px;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .profile-tab-btn svg {
+      font-size: 1.15em;
+      flex-shrink: 0;
+    }
+
+    .profile-tab-btn:hover {
+      color: var(--white);
+    }
+
+    .profile-tab-btn.active {
+      color: var(--white);
+      border-bottom-color: var(--platinum);
+      font-weight: 700;
+    }
+
+    .profile-tab-pane {
+      display: none;
+    }
+
+    .profile-tab-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .orders-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .order-card {
+      background: var(--jet);
+      border: 1px solid var(--graphite);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .order-id-txt {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .order-date-txt {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--ash);
+      margin-top: 4px;
+    }
+
+    .order-amt-txt {
+      font-family: 'DM Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--platinum);
+    }
+
+    /* TARJETAS DE PUNTOS Y CUPONES */
+    .points-summary-card {
+      background: var(--jet);
+      border: 1px solid var(--graphite);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .xp-summary-card {
+      background: linear-gradient(135deg, #1A1A1A 0%, #222526 100%);
+      border: 1px solid var(--graphite);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .xp-progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: var(--onyx);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 12px;
+      border: 1px solid var(--graphite);
+    }
+
+    .xp-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8 0%, #3fe7b8 100%);
+      border-radius: 10px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .level-badge-pill {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .points-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      line-height: 1;
+      color: #3fe7b8;
+    }
+
+    .points-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--ash);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .coupons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .coupon-card {
+      background: var(--jet);
+      border: 1px dashed var(--graphite);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .coupon-code {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── RESPONSIVIDAD MÓVIL Y TABLETS ── */
+    @media (max-width: 900px) {
+      .profile-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .profile-cover {
+        height: 180px;
+      }
+
+      .profile-top-actions {
+        top: 16px;
+        right: 16px;
+        gap: 8px;
+      }
+
+      .profile-action-icon-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+      }
+
+      .profile-page-container {
+        padding: 0 16px 40px;
+      }
+
+      .profile-header-area {
+        margin-top: -42px;
+        margin-bottom: 24px;
+      }
+
+      .profile-identity-group {
+        gap: 14px;
+      }
+
+      .profile-avatar-box {
+        width: 84px;
+        height: 84px;
+        border-width: 3px;
+      }
+
+      .profile-display-name {
+        font-size: 1.45rem;
+      }
+
+      .profile-handle {
+        font-size: 0.78rem;
+        word-break: break-all;
+      }
+
+      .profile-info-card,
+      .profile-main-content {
+        padding: 20px 16px;
+        border-radius: 16px;
+      }
+
+      .order-card {
+        padding: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .settings-sidebar {
+        width: 100vw;
+        max-width: 100vw;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .profile-tabs-nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        padding: 5px;
+        background: var(--jet);
+        border: 1px solid var(--graphite);
+        border-radius: 14px;
+        border-bottom: 1px solid var(--graphite);
+        margin-bottom: 20px;
+      }
+      .profile-tab-btn {
+        font-size: 0.8rem;
+        padding: 10px 6px;
+        border-bottom: none;
+        border-radius: 10px;
+        justify-content: center;
+        width: 100%;
+        gap: 6px;
+      }
+      .profile-tab-btn.active {
+        background: var(--onyx);
+        color: var(--white);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    /* ── SIDEBAR CONFIGURACIÓN RESPONSIVE ── */
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 9998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .settings-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .settings-sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 360px;
+      max-width: 100vw;
+      background: var(--onyx);
+      border-left: 1px solid var(--graphite);
+      z-index: 9999;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .settings-sidebar.active {
+      transform: translateX(0);
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .sidebar-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin: 0;
+    }
+
+    .sidebar-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--ash);
+      font-size: 1.3rem;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .sidebar-close-btn:hover {
+      color: var(--white);
+    }
+
+    .sidebar-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-bottom: 12px;
+    }
+
+    .sidebar-menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--platinum);
+    }
+
+    .sidebar-logout-wrap {
+      margin-top: auto;
+      padding-top: 28px;
+    }
+
+    .sidebar-logout-btn:hover {
+      transform: none !important;
+      color: var(--jet) !important;
+      box-shadow: 0 0 18px rgba(244, 63, 94, 0.85), 0 0 32px rgba(244, 63, 94, 0.5) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- OVERLAY BACKDROP DEL SIDEBAR -->
+  <div class="settings-overlay" id="settingsOverlay" onclick="closeSettingsSidebar()"></div>
+
+  <!-- SIDEBAR CONFIGURACIÓN LATERAL -->
+  <aside class="settings-sidebar" id="settingsSidebar">
+    <div class="sidebar-header">
+      <h3 class="sidebar-title">Configuración de Cuenta</h3>
+      <button class="sidebar-close-btn" onclick="closeSettingsSidebar()">✕</button>
+    </div>
+    <div class="sidebar-body">
+      <div class="sidebar-section-title">Info</div>
+
+      <div class="sidebar-menu-item" style="flex-direction:column; align-items:flex-start; gap:4px; padding:12px 0;">
+        <span
+          style="font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ash);">Correo
+          Electrónico</span>
+        <span style="color:var(--white); font-family:'DM Mono',monospace; font-size:0.88rem;"
+          id="sidebarUserEmail">cargando...</span>
+      </div>
+
+      <div class="sidebar-menu-item">
+        <span
+          style="font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ash);">Estado
+          de la Cuenta</span>
+        <span style="color:#3fe7b8; font-weight:700;">Activa</span>
+      </div>
+
+      <div class="sidebar-menu-item">
+        <span
+          style="font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ash);">Miembro
+          Desde</span>
+        <span style="color:var(--white); font-family:'DM Mono',monospace; font-size:0.88rem;">2026</span>
+      </div>
+
+      <div class="sidebar-logout-wrap">
+        <button onclick="handleLogout()" class="btn-primary sidebar-logout-btn"
+          style="width:100%; cursor:pointer;">Cerrar Sesión</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- BANNER PORTADA PANTALLA COMPLETA -->
+  <div class="profile-cover">
+    <div class="profile-top-actions">
+      <button class="profile-action-icon-btn" title="Configuración de Cuenta" onclick="openSettingsSidebar()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M3.082 13.945c-.529-.95-.793-1.426-.793-1.945s.264-.994.793-1.944L4.43 7.63l1.426-2.381c.559-.933.838-1.4 1.287-1.66c.45-.259.993-.267 2.08-.285L12 3.26l2.775.044c1.088.018 1.631.026 2.08.286s.73.726 1.288 1.659L19.57 7.63l1.35 2.426c.528.95.792 1.425.792 1.944s-.264.994-.793 1.944L19.57 16.37l-1.426 2.381c-.559.933-.838 1.4-1.287 1.66c-.45.259-.993.267-2.08.285L12 20.74l-2.775-.044c-1.088-.018-1.631-.026-2.08-.286s-.73-.726-1.288-1.659L4.43 16.37z" />
+            <circle cx="12" cy="12" r="3" />
+          </g>
+        </svg>
+      </button>
+      <button class="profile-action-icon-btn" title="Volver a la Tienda"
+        onclick="window.location.href='/home.html'">✕</button>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL PANTALLA COMPLETA -->
+  <div class="profile-page-container">
+
+    <!-- CABECERA DE PERFIL ALINEADA HORIZONTALMENTE -->
+    <div class="profile-header-area">
+      <div class="profile-identity-group">
+        <div class="profile-avatar-box">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="#F0F4F8" />
+            <path
+              d="M50 42C56.6274 42 62 36.6274 62 30C62 23.3726 56.6274 18 50 18C43.3726 18 38 23.3726 38 30C38 36.6274 43.3726 42 50 42Z"
+              fill="#1E293B" />
+            <path d="M50 48C34.536 48 22 60.536 22 76V82H78V76C78 60.536 65.464 48 50 48Z" fill="#1E293B" />
+          </svg>
+        </div>
+        <div class="profile-identity-info">
+          <div class="profile-name-row">
+            <h1 class="profile-display-name" id="userName">Cargando...</h1>
+          </div>
+          <p class="profile-handle" id="userHandle">@usuario · Cliente de ArisShop</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL A ANCHO COMPLETO -->
+    <div class="profile-grid-layout">
+
+      <div class="profile-main-content">
+
+        <!-- NAVEGACIÓN DE PESTAÑAS -->
+        <div class="profile-tabs-nav">
+          <button class="profile-tab-btn active" id="tabBtnPuntos" onclick="switchProfileTab('puntos')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.125em;"><path fill="currentColor" d="m5.825 21l1.625-7.025L2 9.25l7.2-.625L12 2l2.8 6.625l7.2.625l-5.45 4.725L18.175 21L12 17.275z"/></svg>
+            Saldo en Puntos
+          </button>
+          <button class="profile-tab-btn" id="tabBtnCupones" onclick="switchProfileTab('cupones')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.125em;"><path fill="currentColor" d="m22 10.92l-2.74-1.59c2.64-2.25-.01-6.45-3.18-5.02l-.87.37l-.11-.96c-.1-1.08-.66-1.85-1.4-2.3c-1.64-.953-4.14-.3-4.54 2.08L6.41 1.92c-.96-.56-2.18-.23-2.73.73l-1 1.73c-.28.48-.11 1.09.37 1.37l7.79 4.5l1.5-2.6l1.73 1l-1.5 2.6l7.79 4.5c.48.25 1.1.11 1.37-.37l1-1.73c.55-.96.23-2.18-.73-2.73M12.37 5c-.87.25-1.57-.68-1.13-1.45c.26-.48.89-.64 1.37-.37c.77.45.62 1.61-.24 1.82m5.19 3c-.86.25-1.56-.68-1.12-1.45c.27-.48.89-.64 1.36-.37c.77.45.62 1.61-.24 1.82m3.31 8.88c.41 0 .8-.14 1.13-.38V20c0 1.11-.89 2-2 2H4a2 2 0 0 1-2-2v-9h8.15l.85.5V20h2v-7.35l6.87 3.96c.3.18.63.27 1 .27"/></svg>
+            Cupones y Regalos
+          </button>
+        </div>
+
+        <!-- PANEL 1: SALDO EN PUNTOS Y GAMIFICACIÓN XP -->
+        <div class="profile-tab-pane active" id="tabPanePuntos">
+          
+          <!-- TARJETA DE PROGRESIÓN XP Y NIVEL -->
+          <div class="xp-summary-card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+              <div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="level-badge-pill" id="userLevelBadge">Nivel Bronce</span>
+                  <span style="font-family:'DM Mono',monospace; font-size:0.8rem; color:#3fe7b8; font-weight:700;" id="userMultiplierTag">Multiplicador 1.0x Puntos</span>
+                </div>
+                <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.4rem; color:var(--white); margin-top:8px;" id="userXpTotal">0 XP Acumulados</div>
+                <div style="font-size:0.82rem; color:var(--ash); font-family:'DM Sans',sans-serif; margin-top:2px;" id="userLevelPerk">Beneficio: Nivel Inicial · Descuentos Exclusivos</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--ash);" id="xpProgressTxt">0 / 500 XP rumbo a Nivel Plata</div>
+              </div>
+            </div>
+            <div class="xp-progress-bar-bg">
+              <div class="xp-progress-bar-fill" id="xpProgressBarFill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- TARJETA DE PUNTOS CANJEABLES Y VENCIMIENTO FIFO POR LOTE -->
+          <div class="points-summary-card">
+            <div>
+              <div class="points-label">Saldo de Puntos Canjeables</div>
+              <div class="points-val" id="userPointsVal">0 PTS</div>
+              <div style="font-size:0.85rem; color:var(--ash); font-family:'DM Mono',monospace; margin-top:4px;" id="userPointsEquiv">Valor de canje: $0 COP ($10 por punto)</div>
+            </div>
+            <div style="text-align:right;" id="nextExpirationContainer">
+              <div style="font-family:'DM Mono',monospace; font-size:0.8rem; color:var(--ash);" id="nextExpirationNotice">Cargando saldo...</div>
+            </div>
+          </div>
+
+          <!-- CATÁLOGO DE RECOMPENSAS CANJEABLES -->
+          <div style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--ash); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:14px;">Catálogo de Recompensas con Puntos</div>
+          <div id="rewardsCatalogContainer" style="margin-bottom:28px;">
+            <div style="text-align:center; color:var(--ash); font-family:'DM Mono',monospace; font-size:0.85rem; padding:32px; background:var(--jet); border:1px solid var(--graphite); border-radius:14px;">
+              🛍️ Realiza tu primera compra para acumular puntos y desbloquear el catálogo de recompensas.
+            </div>
+          </div>
+
+          <!-- HISTORIAL DE PUNTOS Y XP -->
+          <div style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--ash); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px;">Historial de Puntos y XP</div>
+          <div style="display:flex; flex-direction:column; gap:10px;" id="loyaltyLedgerHistory">
+            <div style="text-align:center; color:var(--ash); font-family:'DM Mono',monospace; font-size:0.85rem; padding:32px; background:var(--jet); border:1px solid var(--graphite); border-radius:14px;">No tienes movimientos de puntos aún.</div>
+          </div>
+
+        </div>
+
+        <!-- PANEL 2: CUPONES PERSONALES CANJEADOS Y BENEFICIOS DE NIVEL -->
+        <div class="profile-tab-pane" id="tabPaneCupones">
+          
+          <div style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--ash); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">Mis Cupones y Recompensas Emitidas (Vigencia 90 días)</div>
+          <div class="coupons-grid" id="userPersonalCouponsGrid" style="margin-bottom:32px;">
+            <div style="grid-column:1/-1; text-align:center; color:var(--ash); font-family:'DM Mono',monospace; font-size:0.85rem; padding:32px; background:var(--jet); border:1px solid var(--graphite); border-radius:14px;">
+              Aún no has canjeado cupones. Canjea tus puntos en la pestaña <strong>Saldo en Puntos</strong> para emitir tus códigos.
+            </div>
+          </div>
+
+          <div style="font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--ash); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">Beneficios Pasivos de tu Nivel Actual</div>
+          <div style="display:flex; flex-direction:column; gap:12px;" id="userLevelPerksGrid">
+            <div class="order-card" style="padding:18px 22px;">
+              <div>
+                <div style="font-family:'DM Sans',sans-serif; font-weight:700; color:var(--white);" id="perkTitleTxt">Nivel Bronce — Nivel Inicial · Descuentos Exclusivos</div>
+                <div style="font-size:0.8rem; color:var(--ash); margin-top:2px;">Beneficio pasivo y automático aplicado al finalizar tu compra</div>
+              </div>
+              <span style="font-family:'DM Mono',monospace; font-size:0.75rem; color:#38bdf8; font-weight:700; background:rgba(56,189,248,0.1); padding:4px 10px; border-radius:12px; border:1px solid rgba(56,189,248,0.3);">PASIVO ACTIVO</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN INFERIOR DEDICADA: MIS COMPRAS REALIZADAS -->
+    <section style="margin-top: 32px; background: var(--onyx); border: 1px solid var(--graphite); border-radius: 20px; padding: 32px;">
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.05em; color: var(--white); margin: 0 0 20px 0;">Mis Compras Realizadas</h2>
+      <div class="orders-grid" id="userOrdersList">
+        <div style="text-align:center; color:var(--ash); font-family:'DM Mono',monospace; font-size:0.85rem; padding:32px;">Cargando tus compras...</div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="/src/js/utils.js"></script>
+  <script src="/src/js/socket-client.js"></script>
+  <script src="/src/js/profile.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Cuenta — ArisShop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/src/css/home.css"/>
+  <style>
+    .auth-page-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      position: relative;
+    }
+    .auth-card {
+      background: var(--onyx);
+      border: 1px solid var(--graphite);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 44px 40px 40px;
+      position: relative;
+    }
+    .auth-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      background: transparent;
+      border: none;
+      color: var(--ash);
+      font-size: 1.4rem;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .auth-close-btn:hover {
+      color: var(--white);
+      transform: scale(1.15);
+    }
+    .auth-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .auth-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .auth-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .auth-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ash);
+    }
+    .auth-input {
+      background: var(--jet);
+      border: 1px solid var(--graphite);
+      color: var(--white);
+      padding: 14px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .auth-input:focus {
+      border-color: var(--platinum);
+    }
+    .auth-alert {
+      padding: 12px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .auth-alert.error {
+      background: rgba(224, 224, 224, 0.05);
+      border: 1px solid var(--graphite);
+      color: #ff6b6b;
+    }
+    .auth-alert.success {
+      background: rgba(224, 224, 224, 0.05);
+      border: 1px solid var(--platinum);
+      color: var(--white);
+    }
+    .auth-footer-link {
+      margin-top: 24px;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--ash);
+    }
+    .auth-footer-link a {
+      color: var(--white);
+      text-decoration: underline;
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-page-wrap">
+  <div class="auth-card" id="registerFormContainer">
+    <button class="auth-close-btn" title="Cerrar y volver a Inicio" onclick="window.location.href='/home.html'">✕</button>
+    <h1 class="auth-title">Crear Cuenta</h1>
+    <p class="auth-subtitle">Regístrate en ArisShop</p>
+
+    <div class="auth-alert error" id="regErrorMsg"></div>
+    <div class="auth-alert success" id="regSuccessMsg"></div>
+
+    <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+      <div class="auth-field">
+        <label class="auth-label">Nombre Completo</label>
+        <input type="text" id="regName" class="auth-input" required placeholder="Tu nombre completo" />
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Correo Electrónico</label>
+        <input type="email" id="regEmail" class="auth-input" required placeholder="tu@correo.com" />
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Contraseña</label>
+        <input type="password" id="regPassword" class="auth-input" required placeholder="••••••••" />
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%; margin-top:12px; cursor:pointer;">Registrarme</button>
+    </form>
+
+    <div class="auth-footer-link">
+      ¿Ya tienes cuenta? <a href="/src/pages/login.html">Iniciar Sesión</a>
+    </div>
+  </div>
+</div>
+
+<script src="/src/js/utils.js"></script>
+<script src="/src/js/socket-client.js"></script>
+<script src="/src/js/login.js"></script>
+</body>
+</html>

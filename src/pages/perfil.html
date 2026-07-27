@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil del Cliente — ArisShop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/src/css/home.css"/>
+  <style>
+    .profile-page-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      position: relative;
+    }
+    .profile-card {
+      background: var(--onyx);
+      border: 1px solid var(--graphite);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 44px 40px 40px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    }
+    .profile-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      background: transparent;
+      border: none;
+      color: var(--ash);
+      font-size: 1.4rem;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .profile-close-btn:hover {
+      color: var(--white);
+      transform: scale(1.15);
+    }
+    .profile-avatar {
+      font-size: 3rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .profile-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    .profile-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: var(--ash);
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .profile-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-bottom: 12px;
+    }
+    .orders-list-box {
+      background: var(--jet);
+      border: 1px solid var(--graphite);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 28px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .order-item-row:last-child {
+      border-bottom: none;
+    }
+    .order-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--white);
+    }
+    .order-total {
+      font-family: 'DM Mono', monospace;
+      font-weight: 700;
+      color: var(--platinum);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-page-wrap">
+  <div class="profile-card">
+    <button class="profile-close-btn" title="Volver a Inicio" onclick="window.location.href='/home.html'">✕</button>
+    <div class="profile-avatar">👤</div>
+    <h1 class="profile-title" id="userName">Mi Perfil</h1>
+    <p class="profile-subtitle" id="userEmail">cargando@correo.com</p>
+
+    <!-- HISTORIAL DE COMPRAS -->
+    <div class="profile-section-label">Mis Compras Recientes</div>
+    <div class="orders-list-box" id="userOrdersList">
+      <div style="text-align:center; color:var(--ash); font-family:'DM Mono',monospace; font-size:0.8rem; padding:12px;">Cargando tus pedidos...</div>
+    </div>
+
+    <!-- BOTONES -->
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <button onclick="handleLogout()" class="btn-primary" style="width:100%; cursor:pointer; background:rgba(244, 63, 94, 0.15); border:1px solid #f43f5e; color:#fff;">Cerrar Sesión</button>
+      <a href="/home.html" class="btn-ghost" style="display:block; text-decoration:none; text-align:center;">Volver a la Tienda</a>
+    </div>
+  </div>
+</div>
+
+<script src="/src/js/utils.js"></script>
+<script src="/src/js/socket-client.js"></script>
+<script src="/src/js/perfil.js"></script>
+</body>
+</html>
