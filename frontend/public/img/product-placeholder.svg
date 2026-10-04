@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#151515"/>
+      <stop offset="100%" stop-color="#343434"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" rx="24" ry="24" fill="url(#grad)"/>
+  <g fill="#ffffff" font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="320" y="180" font-size="48" font-weight="700">Imagen</text>
+    <text x="320" y="240" font-size="24" opacity="0.8">Producto sin foto</text>
+  </g>
+</svg>
