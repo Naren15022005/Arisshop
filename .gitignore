@@ -1,0 +1,38 @@
+# Dependencias
+node_modules/
+server/node_modules/
+frontend/node_modules/
+
+# Binarios y compilados
+backend/arisshop-server
+arisshop-server
+bin/cloudflared
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Variables de entorno, llaves y credenciales sensibles
+.env
+.env.*
+!.env.example
+*.env
+backend/.env
+*.pem
+*.key
+
+# Datos locales temporales y respaldo
+backend/data/*.tmp
+backend/data/*.json
+backend/*.tmp
+
+# Artefactos de Frontend
+frontend/dist/
+
+# Logs y SO
+logs/
+*.log
+*.pid
+.DS_Store
+Thumbs.db
