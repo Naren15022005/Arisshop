@@ -1,4 +1,5 @@
 // Data is centralized in src/js/data.js (window.ALL)
+const escapeHTML = window.escapeHTML || (str => String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[c]));
 
 function getCategoryLabels() {
   const categoryMeta = window.CATEGORIES || [];
@@ -59,7 +60,7 @@ function render() {
   document.getElementById('breadCat').textContent    = state.cat === 'Todos' ? 'Todos los productos' : state.cat;
   document.getElementById('pageTitle').innerHTML     = state.cat === 'Todos'
     ? 'Todos los <span>Productos</span>'
-    : `<span>${state.cat}</span>`;
+    : `<span>${escapeHTML(state.cat)}</span>`;
 
   const grid  = document.getElementById('productsGrid');
   const empty = document.getElementById('emptyState');
@@ -95,27 +96,32 @@ function render() {
 function badge(p) {
   if (!p.badge) return '';
   const labels = {new:'Nuevo', sale:'Oferta', hot:'Popular'};
-  return `<span class="card-badge ${p.badge}">${labels[p.badge]}</span>`;
+  const label = labels[p.badge] || (window.escapeHTML ? window.escapeHTML(p.badge) : p.badge);
+  const badgeClass = window.escapeHTML ? window.escapeHTML(p.badge) : p.badge;
+  return `<span class="card-badge ${badgeClass}">${label}</span>`;
 }
 
 function cardGrid(p) {
+  const escape = escapeHTML;
+  const safeUrl = window.sanitizeURL || (u => u);
+  const safeId = encodeURIComponent(String(p.id));
   return `
   <div class="product-card">
     <div class="card-img">
       <div class="card-img-bg"></div>
       ${badge(p)}
-      <div class="card-img-inner" style="${p.img ? `background-image:url('${p.img}')` : ''}">
+      <div class="card-img-inner" style="${p.img ? `background-image:url('${safeUrl(p.img)}')` : ''}">
         ${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}
       </div>
       <div class="card-overlay">
-        <button class="overlay-btn" onclick="addToCart(${p.id})">Agregar al carrito</button>
-        <a href="/src/pages/detalle.html?id=${p.id}" class="overlay-btn ghost">Ver detalles</a>
+        <button class="overlay-btn" onclick="addToCart('${safeId}')">Agregar al carrito</button>
+        <a href="/src/pages/detalle.html?id=${safeId}" class="overlay-btn ghost">Ver detalles</a>
       </div>
     </div>
     <div class="card-body">
-      <div class="card-cat">${p.cat}</div>
-      <div class="card-name">${p.name}</div>
-      <div class="card-specs">${p.specs||''}</div>
+      <div class="card-cat">${escape(p.cat)}</div>
+      <div class="card-name">${escape(p.name)}</div>
+      <div class="card-specs">${escape(p.specs||'')}</div>
       <div class="card-footer">
         <div class="card-price">
           ${p.old ? `<span class="old">${fmt(p.old)}</span>` : ''}
@@ -130,20 +136,23 @@ function cardGrid(p) {
 }
 
 function cardList(p) {
+  const escape = escapeHTML;
+  const safeUrl = window.sanitizeURL || (u => u);
+  const safeId = encodeURIComponent(String(p.id));
   return `
   <div class="product-card">
     <div class="card-img">
       <div class="card-img-bg"></div>
       ${badge(p)}
-      <div class="card-img-inner" style="${p.img ? `background-image:url('${p.img}')` : ''}">
+      <div class="card-img-inner" style="${p.img ? `background-image:url('${safeUrl(p.img)}')` : ''}">
         ${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}
       </div>
     </div>
     <div class="card-body">
       <div>
-        <div class="card-cat">${p.cat}</div>
-        <div class="card-name">${p.name}</div>
-        <div class="card-specs">${p.specs||''}</div>
+        <div class="card-cat">${escape(p.cat)}</div>
+        <div class="card-name">${escape(p.name)}</div>
+        <div class="card-specs">${escape(p.specs||'')}</div>
       </div>
       <div class="card-footer">
         <div class="card-price">
@@ -151,8 +160,8 @@ function cardList(p) {
           ${fmt(p.price)}
         </div>
           <div class="card-actions">
-          <button class="overlay-btn" onclick="addToCart(${p.id})">+ Carrito</button>
-          <a href="/src/pages/detalle.html?id=${p.id}" class="overlay-btn ghost" style="width:auto;padding:8px 16px;font-size:.62rem;">Detalles</a>
+          <button class="overlay-btn" onclick="addToCart('${safeId}')">+ Carrito</button>
+          <a href="/src/pages/detalle.html?id=${safeId}" class="overlay-btn ghost" style="width:auto;padding:8px 16px;font-size:.62rem;">Detalles</a>
         </div>
       </div>
     </div>
@@ -184,14 +193,15 @@ function goPage(n) {
 // ── CATEGORIES ───────────────────────────────────────────────────
 function renderCats() {
   const el = document.getElementById('catList');
+  if (!el) return;
   el.innerHTML = CATS.map(c => {
     const count = c === 'Todos' ? ALL.length : ALL.filter(p => p.cat === c).length;
-    return `<button class="cat-btn ${state.cat===c?'active':''}" onclick="setCat('${c}')">${c}<span class="cat-btn-count">${count}</span></button>`;
+    return `<button class="cat-btn ${state.cat===c?'active':''}" onclick="setCat('${encodeURIComponent(c)}')">${escapeHTML(c)}<span class="cat-btn-count">${count}</span></button>`;
   }).join('');
 }
 
 function setCat(c) {
-  state.cat  = c;
+  state.cat  = decodeURIComponent(c);
   state.page = 1;
   renderCats();
   render();
@@ -200,20 +210,22 @@ function setCat(c) {
 // ── ACTIVE FILTER TAGS ───────────────────────────────────────────
 function renderActiveFilters() {
   const el = document.getElementById('activeFilters');
+  if (!el) return;
   let tags = `<button class="mobile-filter-btn" onclick="openSidebar()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg> Filtros</button>`;
 
   if (state.cat !== 'Todos') {
-    tags += `<span class="active-tag">${state.cat}<button onclick="setCat('Todos')">✕</button></span>`;
+    tags += `<span class="active-tag">${escapeHTML(state.cat)}<button onclick="setCat('Todos')">✕</button></span>`;
   }
   if (state.search) {
-    tags += `<span class="active-tag">"${state.search}"<button onclick="clearSearch()">✕</button></span>`;
+    tags += `<span class="active-tag">"${escapeHTML(state.search)}"<button onclick="clearSearch()">✕</button></span>`;
   }
   if (state.priceMin > 0 || state.priceMax < 10000000) {
     tags += `<span class="active-tag">${fmt(state.priceMin)} – ${fmt(state.priceMax)}<button onclick="resetPrice()">✕</button></span>`;
   }
   state.badges.forEach(b => {
     const labels = {new:'Nuevo', sale:'Oferta', hot:'Popular'};
-    tags += `<span class="active-tag">${labels[b]}<button onclick="removeBadge('${b}')">✕</button></span>`;
+    const label = labels[b] || escapeHTML(b);
+    tags += `<span class="active-tag">${label}<button onclick="removeBadge('${encodeURIComponent(b)}')">✕</button></span>`;
   });
 
   const any = state.cat !== 'Todos' || state.search || state.priceMin > 0 || state.priceMax < 10000000 || state.badges.length;
@@ -263,8 +275,9 @@ function resetPrice() {
 }
 
 function removeBadge(b) {
-  state.badges = state.badges.filter(x => x !== b);
-  document.querySelectorAll(`.badge-filter[data-badge="${b}"]`).forEach(el => el.classList.remove('active'));
+  const decoded = decodeURIComponent(b);
+  state.badges = state.badges.filter(x => x !== decoded && x !== b);
+  document.querySelectorAll(`.badge-filter[data-badge="${CSS.escape ? CSS.escape(decoded) : decoded}"]`).forEach(el => el.classList.remove('active'));
   render();
 }
 

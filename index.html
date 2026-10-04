@@ -1,12 +1,268 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0;url=/home.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ArisShop</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ArisShop — Vault de Cuentas, Licencias & Keys</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="src/css/home.css?v=2026.7"/>
 </head>
 <body>
-  <p>Redirigiendo a <a href="/home.html">home</a>...</p>
+
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- Cart Drawer -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-title">Tu Carrito</div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <span class="cart-empty-icon">🛒</span>
+      Tu carrito está vacío
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <div class="cart-total-label">Total</div>
+      <div class="cart-total-amount" id="cartTotal">$0</div>
+    </div>
+    <button class="checkout-btn">Finalizar Compra →</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Aris<span>Shop</span></a>
+  <div class="nav-actions">
+    <a href="/src/pages/catalogo.html" class="nav-link">Catálogo</a>
+    <button class="nav-icon" title="Usuario" onclick="window.location.href=(window.ArisAuth && window.ArisAuth.isAuthenticated()) ? '/src/pages/profile.html' : '/src/pages/login.html'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4a4 4 0 1 0 0 8a4 4 0 0 0 0-8M6 8a6 6 0 1 1 12 0A6 6 0 0 1 6 8m2 10a3 3 0 0 0-3 3a1 1 0 1 1-2 0a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5a1 1 0 1 1-2 0a3 3 0 0 0-3-3z"/></svg>
+    </button>
+    <button class="nav-icon" onclick="toggleCart()" title="Carrito">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="heroSection">
+  <div class="hero-ambient-glow" id="heroDynamicGlow"></div>
+
+  <div class="hero-container">
+    <div class="hero-left reveal">
+      <div class="hero-tag">
+        <span class="hero-tag-dot"></span>
+        <span class="hero-tag-text"># ARISSHOP // DIGITAL VAULT &amp; LICENSES 2026</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-line line-1">ACCESO TOTAL</span>
+        <span class="hero-line line-2 outline">A CUENTAS &amp;</span>
+        <span class="hero-line line-3">KEYS DE ÉLITE</span>
+      </h1>
+
+      <p class="hero-desc">
+        Cuentas premium, software profesional y licencias de videojuegos con entrega automatizada. Acceso inmediato a modelos de IA, claves globales para Steam y Xbox, y suscripciones oficiales sin límites.
+      </p>
+
+      <!-- Barra de búsqueda rápida integrada en el Hero -->
+      <div class="hero-search-bar">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="heroSearchInput" placeholder="¿Qué deseas activar hoy? Ej: ChatGPT, Game Pass, Midjourney..." onkeydown="if(event.key==='Enter') executeHeroSearch()" autocomplete="off" />
+        <button class="hero-search-btn" onclick="executeHeroSearch()">BUSCAR</button>
+      </div>
+
+      <!-- Píldoras de exploración rápida -->
+      <div class="hero-chips">
+        <span class="chip-label">EXPLORAR:</span>
+        <a href="/src/pages/catalogo.html?cat=Cuentas+IA" class="hero-chip">Cuentas IA ⚡</a>
+        <a href="/src/pages/catalogo.html?cat=Juegos+Digitales" class="hero-chip">Juegos &amp; Keys 🎮</a>
+        <a href="/src/pages/catalogo.html?cat=Software+y+Suscripciones" class="hero-chip">Suscripciones Pro 🎬</a>
+        <a href="/src/pages/catalogo.html" class="hero-chip highlight">Catálogo Completo ↗</a>
+      </div>
+
+      <!-- Garantías y Trust Row -->
+      <div class="hero-trust">
+        <div class="trust-item"><span class="trust-icon">⚡</span><span>Entrega en 60s al Correo</span></div>
+        <div class="trust-sep"></div>
+        <div class="trust-item"><span class="trust-icon">🛡️</span><span>Garantía de Activación 100%</span></div>
+        <div class="trust-sep"></div>
+        <div class="trust-item"><span class="trust-icon">🔒</span><span>Códigos Oficiales Globales</span></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <!-- Tarjeta de Showcase interactivo del dispositivo estrella -->
+      <div class="hero-showcase-card" id="heroShowcaseCard">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+
+        <div class="showcase-header">
+          <span class="showcase-badge"><span class="badge-dot"></span> VAULT SPOTLIGHT // NODO ACTIVO</span>
+          <span class="showcase-rating">★ 4.99 <span class="rating-sub">(2.4k+ activaciones)</span></span>
+        </div>
+
+        <div class="showcase-visual">
+          <div class="card-glow-halo" id="cardGlowHalo"></div>
+          <img id="heroProductImg" class="hero-product-image" src="src/img/card-chatgpt.jpg" alt="Licencia digital ChatGPT Plus ArisShop" />
+        </div>
+
+        <!-- Tira de seguridad y estado de clave digital -->
+        <div class="digital-key-strip">
+          <div class="strip-left">
+            <span class="key-lbl">LICENCIA //</span>
+            <span class="key-code" id="heroProductKey">OPENAI-GPT4-****-982X</span>
+          </div>
+          <span class="key-status">● DISPONIBLE INMEDIATO</span>
+        </div>
+
+        <!-- Selector interactivo de dispositivos estrella en el Hero -->
+        <div class="showcase-switcher">
+          <button class="switcher-btn active" onclick="switchHeroProduct(0)">01 · ChatGPT Plus</button>
+          <button class="switcher-btn" onclick="switchHeroProduct(1)">02 · Midjourney Pro</button>
+          <button class="switcher-btn" onclick="switchHeroProduct(2)">03 · Game Pass Ult.</button>
+        </div>
+
+        <div class="showcase-footer">
+          <div class="showcase-info">
+            <div class="showcase-tag">IA GENERATIVA // OPENAI GPT-4o</div>
+            <h3 class="showcase-title" id="heroProductTitle">ChatGPT Plus (1 Mes)</h3>
+            <div class="showcase-specs" id="heroProductSpecs">Cuenta Privada · GPT-4o Ilimitado · DALL-E 3 · Modo Voz</div>
+            <div class="showcase-price-row">
+              <span class="showcase-price" id="heroProductPrice">$90.000</span>
+              <span class="showcase-stock">● Entrega en 60s</span>
+            </div>
+          </div>
+          <div class="showcase-actions">
+            <button class="btn-primary showcase-buy-btn" id="heroBuyBtn" onclick="addToCart(1)">
+              + COMPRAR LICENCIA
+            </button>
+            <a id="heroDetailLink" href="/src/pages/detalle.html?id=1" class="btn-ghost showcase-detail-btn">
+              DETALLES ↗
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetría y estadísticas -->
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">+15K</div>
+          <div class="stat-label">LICENCIAS ENTREGADAS</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">99.9%</div>
+          <div class="stat-label">ACTIVACIÓN EXITOSA</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">&lt; 60S</div>
+          <div class="stat-label">TIEMPO DE ENTREGA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span>★</span> Entrega digital inmediata</span>
+    <span class="ticker-item"><span>★</span> Pago con Nequi y Bancolombia</span>
+    <span class="ticker-item"><span>★</span> Nuevas cuentas y juegos semanales</span>
+    <span class="ticker-item"><span>★</span> Soporte 24/7</span>
+    <span class="ticker-item"><span>★</span> Entrega digital inmediata</span>
+    <span class="ticker-item"><span>★</span> Garantía de cuenta segura</span>
+    <span class="ticker-item"><span>★</span> Pago con Nequi y Bancolombia</span>
+    <span class="ticker-item"><span>★</span> Soporte 24/7</span>
+  </div>
+</div>
+
+<!-- CATEGORÍAS -->
+<section id="categorias">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-tag">Explorar por</div>
+      <h2 class="section-title">Categorías</h2>
+    </div>
+    <a href="/src/pages/catalogo.html" class="see-all">Ver todas →</a>
+  </div>
+  <div class="categories-grid" id="categoriesGrid"></div>
+</section>
+
+<!-- PRODUCTOS -->
+<section id="productos" style="padding-top:0">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-tag">Más vendidos</div>
+      <h2 class="section-title">Productos Destacados</h2>
+    </div>
+    <a href="/src/pages/catalogo.html" class="see-all desktop">Ver catálogo →</a>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+  <a href="/src/pages/catalogo.html" class="see-all mobile">Ver catálogo →</a>
+</section>
+
+<!-- EXCLUSIVOS -->
+<section class="featured reveal" id="destacados">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Lanzamiento exclusivo</div>
+      <h2 class="section-title">Nuevos Ingresos</h2>
+    </div>
+    <a href="/src/pages/catalogo.html" class="see-all desktop">Ver catálogo →</a>
+  </div>
+  <div class="featured-grid" id="featuredGrid"></div>
+  <a href="/src/pages/catalogo.html" class="see-all mobile">Ver catálogo →</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Aris<span>Shop</span></div>
+      <p class="footer-desc">Servicios digitales premium para Colombia.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">hola@arisshop.co</a></li>
+        <li><a href="/src/pages/admin.html">Admin</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 ArisShop · Hecho en Colombia</div>
+    <div class="footer-socials">
+      <a href="#" class="social-link">Facebook</a>
+      <a href="#" class="social-link">Instagram</a>
+      <a href="#" class="social-link">TikTok</a>
+    </div>
+  </div>
+</footer>
+
+<script src="src/js/config.js"></script>
+<script src="src/js/utils.js"></script>
+<script src="src/js/data.js?v=2026.3"></script>
+<script src="src/js/cart.js"></script>
+<script src="src/js/socket-client.js"></script>
+<script src="src/js/home.js?v=2026.3"></script>
 </body>
 </html>

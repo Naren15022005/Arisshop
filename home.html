@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ArisShop — Productos de Élite</title>
+<title>ArisShop — Vault de Cuentas, Licencias & Keys</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="src/css/home.css"/>
+<link rel="stylesheet" href="src/css/home.css?v=2026.7"/>
 </head>
 <body>
 
@@ -53,36 +53,126 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-left reveal">
-    <div class="hero-tag">Excelentes productos</div>
-    <h1 class="hero-title">
-      <span class="hero-line line-1">EL FUTURO</span>
-      <span class="hero-line line-2 outline">EN TUS</span>
-      <span class="hero-line line-3">MANOS</span>
-    </h1>
-    <p class="hero-desc">Descubre productos que hacen tu vida más fácil. Buscamos las mejores novedades del mercado para ofrecerte calidad, buen precio y un servicio pensado para nuestros clientes.</p>
-    <div class="hero-cta">
-<button class="btn-primary" onclick="window.location.href='/src/pages/catalogo.html'">
-    Explorar Catálogo
-</button>      
-<button class="btn-ghost">Ver Ofertas </button>
+<section class="hero" id="heroSection">
+  <div class="hero-ambient-glow" id="heroDynamicGlow"></div>
+
+  <div class="hero-container">
+    <div class="hero-left reveal">
+      <div class="hero-tag">
+        <span class="hero-tag-dot"></span>
+        <span class="hero-tag-text"># ARISSHOP // DIGITAL VAULT &amp; LICENSES 2026</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-line line-1">ACCESO TOTAL</span>
+        <span class="hero-line line-2 outline">A CUENTAS &amp;</span>
+        <span class="hero-line line-3">KEYS DE ÉLITE</span>
+      </h1>
+
+      <p class="hero-desc">
+        Cuentas premium, software profesional y licencias de videojuegos con entrega automatizada. Acceso inmediato a modelos de IA, claves globales para Steam y Xbox, y suscripciones oficiales sin límites.
+      </p>
+
+      <!-- Barra de búsqueda rápida integrada en el Hero -->
+      <div class="hero-search-bar">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="heroSearchInput" placeholder="¿Qué deseas activar hoy? Ej: ChatGPT, Game Pass, Midjourney..." onkeydown="if(event.key==='Enter') executeHeroSearch()" autocomplete="off" />
+        <button class="hero-search-btn" onclick="executeHeroSearch()">BUSCAR</button>
+      </div>
+
+      <!-- Píldoras de exploración rápida -->
+      <div class="hero-chips">
+        <span class="chip-label">EXPLORAR:</span>
+        <a href="/src/pages/catalogo.html?cat=Cuentas+IA" class="hero-chip">Cuentas IA ⚡</a>
+        <a href="/src/pages/catalogo.html?cat=Juegos+Digitales" class="hero-chip">Juegos &amp; Keys 🎮</a>
+        <a href="/src/pages/catalogo.html?cat=Software+y+Suscripciones" class="hero-chip">Suscripciones Pro 🎬</a>
+        <a href="/src/pages/catalogo.html" class="hero-chip highlight">Catálogo Completo ↗</a>
+      </div>
+
+      <!-- Garantías y Trust Row -->
+      <div class="hero-trust">
+        <div class="trust-item"><span class="trust-icon">⚡</span><span>Entrega en 60s al Correo</span></div>
+        <div class="trust-sep"></div>
+        <div class="trust-item"><span class="trust-icon">🛡️</span><span>Garantía de Activación 100%</span></div>
+        <div class="trust-sep"></div>
+        <div class="trust-item"><span class="trust-icon">🔒</span><span>Códigos Oficiales Globales</span></div>
+      </div>
     </div>
-  </div>
-  <div class="hero-right">
-    <img class="hero-product-image" src="src/img/imagehome.png" alt="Producto destacado" />
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-num">2K+</div>
-        <div class="stat-label">Productos</div>
+
+    <div class="hero-right">
+      <!-- Tarjeta de Showcase interactivo del dispositivo estrella -->
+      <div class="hero-showcase-card" id="heroShowcaseCard">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+
+        <div class="showcase-header">
+          <span class="showcase-badge"><span class="badge-dot"></span> VAULT SPOTLIGHT // NODO ACTIVO</span>
+          <span class="showcase-rating">★ 4.99 <span class="rating-sub">(2.4k+ activaciones)</span></span>
+        </div>
+
+        <div class="showcase-visual">
+          <div class="card-glow-halo" id="cardGlowHalo"></div>
+          <img id="heroProductImg" class="hero-product-image" src="src/img/card-chatgpt.jpg" alt="Licencia digital ChatGPT Plus ArisShop" />
+        </div>
+
+        <!-- Tira de seguridad y estado de clave digital -->
+        <div class="digital-key-strip">
+          <div class="strip-left">
+            <span class="key-lbl">LICENCIA //</span>
+            <span class="key-code" id="heroProductKey">OPENAI-GPT4-****-982X</span>
+          </div>
+          <span class="key-status">● DISPONIBLE INMEDIATO</span>
+        </div>
+
+        <!-- Selector interactivo de dispositivos estrella en el Hero -->
+        <div class="showcase-switcher">
+          <button class="switcher-btn active" onclick="switchHeroProduct(0)">01 · ChatGPT Plus</button>
+          <button class="switcher-btn" onclick="switchHeroProduct(1)">02 · Midjourney Pro</button>
+          <button class="switcher-btn" onclick="switchHeroProduct(2)">03 · Game Pass Ult.</button>
+        </div>
+
+        <div class="showcase-footer">
+          <div class="showcase-info">
+            <div class="showcase-tag">IA GENERATIVA // OPENAI GPT-4o</div>
+            <h3 class="showcase-title" id="heroProductTitle">ChatGPT Plus (1 Mes)</h3>
+            <div class="showcase-specs" id="heroProductSpecs">Cuenta Privada · GPT-4o Ilimitado · DALL-E 3 · Modo Voz</div>
+            <div class="showcase-price-row">
+              <span class="showcase-price" id="heroProductPrice">$90.000</span>
+              <span class="showcase-stock">● Entrega en 60s</span>
+            </div>
+          </div>
+          <div class="showcase-actions">
+            <button class="btn-primary showcase-buy-btn" id="heroBuyBtn" onclick="addToCart(1)">
+              + COMPRAR LICENCIA
+            </button>
+            <a id="heroDetailLink" href="/src/pages/detalle.html?id=1" class="btn-ghost showcase-detail-btn">
+              DETALLES ↗
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-num">98%</div>
-        <div class="stat-label">Satisfacción</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">24H</div>
-        <div class="stat-label">Despacho</div>
+
+      <!-- Telemetría y estadísticas -->
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">+15K</div>
+          <div class="stat-label">LICENCIAS ENTREGADAS</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">99.9%</div>
+          <div class="stat-label">ACTIVACIÓN EXITOSA</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">&lt; 60S</div>
+          <div class="stat-label">TIEMPO DE ENTREGA</div>
+        </div>
       </div>
     </div>
   </div>
@@ -91,12 +181,12 @@
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker">
-    <span class="ticker-item"><span>★</span> Envío gratis +$200k</span>
+    <span class="ticker-item"><span>★</span> Entrega digital inmediata</span>
     <span class="ticker-item"><span>★</span> Pago con Nequi y Bancolombia</span>
-    <span class="ticker-item"><span>★</span> Nuevos ingresos semanales</span>
+    <span class="ticker-item"><span>★</span> Nuevas cuentas y juegos semanales</span>
     <span class="ticker-item"><span>★</span> Soporte 24/7</span>
-    <span class="ticker-item"><span>★</span> Envío gratis +$200k</span>
-    <span class="ticker-item"><span>★</span> Garantía 12 meses</span>
+    <span class="ticker-item"><span>★</span> Entrega digital inmediata</span>
+    <span class="ticker-item"><span>★</span> Garantía de cuenta segura</span>
     <span class="ticker-item"><span>★</span> Pago con Nequi y Bancolombia</span>
     <span class="ticker-item"><span>★</span> Soporte 24/7</span>
   </div>
@@ -145,7 +235,7 @@
   <div class="footer-top">
     <div>
       <div class="footer-brand">Aris<span>Shop</span></div>
-      <p class="footer-desc">Tecnología premium para Colombia.</p>
+      <p class="footer-desc">Servicios digitales premium para Colombia.</p>
     </div>
     <div>
       <div class="footer-col-title">Contacto</div>
@@ -168,10 +258,11 @@
   </div>
 </footer>
 
+<script src="src/js/config.js"></script>
 <script src="src/js/utils.js"></script>
-<script src="src/js/data.js"></script>
+<script src="src/js/data.js?v=2026.3"></script>
 <script src="src/js/cart.js"></script>
 <script src="src/js/socket-client.js"></script>
-<script src="src/js/home.js"></script>
+<script src="src/js/home.js?v=2026.3"></script>
 </body>
 </html>

@@ -1,11 +1,22 @@
 // Socket.io & JWT Client helper for ArisShop
 
 (function() {
-  const SERVER_URL = 'http://localhost:3001';
+  let SERVER_URL = (window.ARIS_CONFIG && window.ARIS_CONFIG.API_URL) || 'http://localhost:3005';
+  if (SERVER_URL.includes('machines-infectious')) {
+    SERVER_URL = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
+      ? window.location.origin
+      : 'https://mph-seven-edit-additionally.trycloudflare.com';
+  }
   let socket = null;
 
   // JWT Helper methods
   const ArisAuth = {
+    baseUrl: SERVER_URL,
+    apiUrl(path) {
+      if (!path) return SERVER_URL;
+      if (path.startsWith('http://') || path.startsWith('https://')) return path;
+      return `${SERVER_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+    },
     setToken(token) {
       localStorage.setItem('aris_jwt_token', token);
     },
@@ -18,7 +29,25 @@
     isAuthenticated() {
       return !!this.getToken();
     },
+    async logout() {
+      try {
+        await fetch(this.apiUrl('/api/auth/logout'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(this.getToken() ? { 'Authorization': `Bearer ${this.getToken()}` } : {})
+          },
+          credentials: 'include'
+        });
+      } catch (e) {
+        // En caso de fallo de red, se procede con la limpieza local
+      } finally {
+        this.removeToken();
+        localStorage.removeItem('aris_current_user');
+      }
+    },
     async fetchWithAuth(url, options = {}) {
+      const fullUrl = this.apiUrl(url);
       const token = this.getToken();
       const headers = {
         'Content-Type': 'application/json',
@@ -27,7 +56,11 @@
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
-      const response = await fetch(url, { ...options, headers });
+      const response = await fetch(fullUrl, {
+        ...options,
+        headers,
+        credentials: 'include' // Envía automáticamente la cookie HttpOnly aris_token
+      });
       if (response.status === 401 || response.status === 403) {
         this.removeToken();
       }
@@ -35,25 +68,47 @@
     }
   };
 
-  // Inicializar cliente WebSocket
+  // Inicializar cliente WebSocket con fallback tolerante a fallos
   function initWebSocket() {
     if (typeof io === 'undefined') return;
 
     try {
       socket = io(SERVER_URL, {
+        transports: ['polling', 'websocket'], // Prioriza polling para evitar errores nativos de handshake en CDNs y escala a WebSocket
         autoConnect: true,
         reconnection: true,
-        reconnectionAttempts: 5,
-        timeout: 3000
+        reconnectionAttempts: 2, // Intentos controlados para no saturar memoria ni consola
+        reconnectionDelay: 2500,
+        reconnectionDelayMax: 6000,
+        timeout: 4000
       });
 
       socket.on('connect', () => {
-        console.log('⚡ Conectado a WebSockets en tiempo real de ArisShop.');
+        console.log('⚡ Conectado al canal en tiempo real de ArisShop.');
+        window.dispatchEvent(new CustomEvent('aris:socket:connect'));
+      });
+
+      socket.on('reconnect', (attempt) => {
+        console.log(`⚡ Reconectado al canal en tiempo real (intento #${attempt})`);
+        window.dispatchEvent(new CustomEvent('aris:socket:reconnect', { detail: { attempt } }));
+      });
+
+      socket.on('connect_error', () => {
+        // Manejo silencioso: en entornos estáticos sin backend activo, detener reconexiones continuas
+        if (socket && socket.io && socket.io.opts && socket.io.opts.reconnectionAttempts <= 1) {
+          socket.disconnect();
+        }
       });
 
       // Escuchar notificaciones de nuevas compras en tiempo real
       socket.on('order:new', (data) => {
         showLivePurchaseToast(data);
+        window.dispatchEvent(new CustomEvent('aris:order:new', { detail: data }));
+      });
+
+      // Escuchar cambios de estado de pedidos en tiempo real
+      socket.on('order:status', (data) => {
+        window.dispatchEvent(new CustomEvent('aris:order:status', { detail: data }));
       });
 
       // Escuchar cambios de stock en tiempo real
@@ -63,14 +118,22 @@
         if (stockEl) {
           stockEl.textContent = `Stock: ${data.newStock}`;
         }
+        window.dispatchEvent(new CustomEvent('aris:stock:update', { detail: data }));
       });
     } catch (e) {
       console.warn('Servidor WebSocket no disponible offline.');
     }
   }
 
-  // Mostrar notificación emergente de compra en tiempo real
-  function showLivePurchaseToast(data) {
+  // Cola FIFO y Throttling para notificaciones de compra en vivo
+  const purchaseToastQueue = [];
+  let isToastDisplaying = false;
+
+  function processPurchaseToastQueue() {
+    if (isToastDisplaying || purchaseToastQueue.length === 0) return;
+    isToastDisplaying = true;
+    const data = purchaseToastQueue.shift();
+
     let toast = document.getElementById('livePurchaseToast');
     if (!toast) {
       toast = document.createElement('div');
@@ -93,16 +156,19 @@
         backdrop-filter: blur(12px);
         transform: translateY(100px);
         opacity: 0;
-        transition: all 0.4s ease;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
       `;
       document.body.appendChild(toast);
     }
+
+    const escape = window.escapeHTML || (str => String(str || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[c]));
+    const safeName = escape(data.name || 'Un cliente');
 
     toast.innerHTML = `
       <span style="font-size: 1.3rem;">🛍️</span>
       <div>
         <div style="font-weight: 700; color: #38bdf8;">¡Nueva compra en vivo!</div>
-        <div style="color: #cbd5e1;">${data.name || 'Un cliente'} acaba de realizar un pedido.</div>
+        <div style="color: #cbd5e1;">${safeName} acaba de realizar un pedido.</div>
       </div>
     `;
 
@@ -112,7 +178,21 @@
     setTimeout(() => {
       toast.style.transform = 'translateY(100px)';
       toast.style.opacity = '0';
-    }, 4500);
+      setTimeout(() => {
+        isToastDisplaying = false;
+        processPurchaseToastQueue();
+      }, 400); // 400ms de transición fluida antes de la siguiente notificación
+    }, 3500);
+  }
+
+  function showLivePurchaseToast(data) {
+    if (!data) return;
+    // Si hay más de 5 en espera, descartar el más viejo para prevenir saturación de memoria
+    if (purchaseToastQueue.length >= 5) {
+      purchaseToastQueue.shift();
+    }
+    purchaseToastQueue.push(data);
+    processPurchaseToastQueue();
   }
 
   // Notificar emisión de pedido al servidor WebSocket

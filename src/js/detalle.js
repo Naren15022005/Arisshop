@@ -25,9 +25,12 @@ function loadDetail() {
 
   // Imagen y badge
   const detalleImg = document.getElementById('detalleImage');
+  const safeUrl = window.sanitizeURL || (u => u);
+  const escape = window.escapeHTML || (s => s);
+
   if (detailProduct.img) {
     detalleImg.textContent = '';
-    detalleImg.style.backgroundImage = `url('${detailProduct.img}')`;
+    detalleImg.style.backgroundImage = `url('${safeUrl(detailProduct.img)}')`;
     detalleImg.classList.add('detalle-img-has-image');
   } else {
     detalleImg.innerHTML = '<span class="img-placeholder">Imagen</span>';
@@ -37,7 +40,7 @@ function loadDetail() {
   const badgeEl = document.getElementById('detalleBadge');
   if (detailProduct.badge) {
     const labels = {new:'Nuevo', sale:'Oferta', hot:'Popular'};
-    badgeEl.textContent = labels[detailProduct.badge] || detailProduct.badge;
+    badgeEl.textContent = labels[detailProduct.badge] || escape(detailProduct.badge);
     badgeEl.style.display = 'inline-block';
   } else {
     badgeEl.style.display = 'none';
@@ -73,10 +76,12 @@ function loadRelated(cat, excludeId) {
     grid.innerHTML = '<p style="color:var(--ash);font-size:.9rem;">No hay productos relacionados.</p>';
     return;
   }
+  const escape = window.escapeHTML || (s => s);
+  const safeUrl = window.sanitizeURL || (u => u);
   grid.innerHTML = related.map(p => `
-    <a href="/src/pages/detalle.html?id=${p.id}" class="rel-card">
-      <span class="rel-card-img" style="${p.img ? `background-image:url('${p.img}')` : ''}">${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}</span>
-      <span class="name">${p.name}</span>
+    <a href="/src/pages/detalle.html?id=${encodeURIComponent(p.id)}" class="rel-card">
+      <span class="rel-card-img" style="${p.img ? `background-image:url('${safeUrl(p.img)}')` : ''}">${p.img ? '' : '<span class="img-placeholder">Imagen</span>'}</span>
+      <span class="name">${escape(p.name)}</span>
       <span class="price">${fmt(p.price)}</span>
     </a>
   `).join('');

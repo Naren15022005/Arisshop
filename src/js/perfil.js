@@ -12,7 +12,7 @@ async function enforceActiveSession() {
   }
 
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/auth/me');
+    const res = await window.ArisAuth.fetchWithAuth('/api/auth/me');
     if (!res.ok) {
       window.ArisAuth.removeToken();
       window.location.href = '/src/pages/login.html';
@@ -36,7 +36,7 @@ async function loadUserOrders(userEmail) {
   const format = window.fmt || (n => '$' + n.toLocaleString('es-CO'));
 
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/orders');
+    const res = await window.ArisAuth.fetchWithAuth('/api/orders');
     if (!res.ok) throw new Error('Error buscando órdenes');
 
     const data = await res.json();

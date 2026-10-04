@@ -1,4 +1,5 @@
 // Lógica de Autenticación de Usuario (Login & Register) con JWT
+const API_BASE = (window.ARIS_CONFIG && window.ARIS_CONFIG.API_URL) || (window.ArisAuth && window.ArisAuth.baseUrl) || 'http://localhost:3005';
 
 document.addEventListener('DOMContentLoaded', () => {
   checkAuthStatus();
@@ -21,11 +22,19 @@ async function handleLoginSubmit(e) {
   if (succBox) succBox.style.display = 'none';
 
   try {
-    const res = await fetch('http://localhost:3001/api/auth/login', {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
+
+    if (res.status === 404) {
+      if (errBox) {
+        errBox.innerHTML = 'El backend no está desplegado en este host estático.<br>Para iniciar sesión y administrar la tienda, abre: <a href="http://localhost:3005/src/pages/login.html" style="color:#38bdf8; text-decoration:underline;">http://localhost:3005</a>';
+        errBox.style.display = 'block';
+      }
+      return;
+    }
 
     const data = await res.json();
 
@@ -67,7 +76,7 @@ async function handleRegisterSubmit(e) {
   if (succBox) succBox.style.display = 'none';
 
   try {
-    const res = await fetch('http://localhost:3001/api/auth/register', {
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password })
@@ -105,7 +114,7 @@ async function fetchProfileData() {
   const profileContainer = document.getElementById('profileContainer');
 
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/auth/me');
+    const res = await window.ArisAuth.fetchWithAuth('/api/auth/me');
     if (!res.ok) {
       window.ArisAuth.removeToken();
       if (formContainer) formContainer.style.display = 'block';

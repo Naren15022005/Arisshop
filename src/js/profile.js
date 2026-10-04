@@ -54,7 +54,7 @@ async function verifyActiveProfileSession() {
   }
 
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/auth/me');
+    const res = await window.ArisAuth.fetchWithAuth('/api/auth/me');
     if (!res.ok) {
       window.ArisAuth.removeToken();
       window.location.href = '/src/pages/login.html';
@@ -90,7 +90,7 @@ async function verifyActiveProfileSession() {
 
 async function fetchUserLoyaltySummary() {
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/loyalty/summary');
+    const res = await window.ArisAuth.fetchWithAuth('/api/loyalty/summary');
     if (!res.ok) return;
 
     const data = await res.json();
@@ -232,7 +232,7 @@ async function handleRedeemReward(rewardId, pointCost, rewardName) {
   if (!confirm(`¿Deseas canjear "${rewardName}" por ${pointCost} Puntos?`)) return;
 
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/loyalty/redeem', {
+    const res = await window.ArisAuth.fetchWithAuth('/api/loyalty/redeem', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rewardId })
@@ -256,7 +256,7 @@ async function fetchUserPurchaseHistory(userEmail) {
   const format = window.fmt || (n => '$' + n.toLocaleString('es-CO'));
 
   try {
-    const res = await window.ArisAuth.fetchWithAuth('http://localhost:3001/api/orders');
+    const res = await window.ArisAuth.fetchWithAuth('/api/orders');
     if (!res.ok) throw new Error('Error buscando pedidos');
 
     const data = await res.json();
